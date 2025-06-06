@@ -1,6 +1,8 @@
 import { useState, useRef, useContext } from "react";
 import AppContext from "../../context/AppContext";
 import classes from "./AuthForm.module.css";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+
 
 const AuthForm = () => {
   const emailInputRef = useRef();
@@ -9,6 +11,7 @@ const AuthForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { token, setToken } = useContext(AppContext);
+  const history=useHistory()
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -40,6 +43,8 @@ const AuthForm = () => {
             setToken(tokenId);
             console.log("here", token);
             alert("Logged In");
+            history.push('/profile')
+
           });
         } else {
           return res.json().then((data) => {
