@@ -3,9 +3,17 @@ import AppContext from "../../context/AppContext";
 
 import classes from "./MainNavigation.module.css";
 import { useContext } from "react";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const MainNavigation = () => {
   const { token, setToken } = useContext(AppContext);
+  const history = useHistory();
+
+  const handleLogOut = () => {
+    setToken("");
+    alert("Logged Out");
+    history.push("/auth");
+  };
   return (
     <header className={classes.header}>
       <Link to="/">
@@ -26,7 +34,7 @@ const MainNavigation = () => {
                 <Link to="/profile">Profile</Link>
               </li>
               <li>
-                <button onClick={() => setToken("")}>Logout</button>
+                <button onClick={handleLogOut}>Logout</button>
               </li>
             </>
           )}
