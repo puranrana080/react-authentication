@@ -3,15 +3,14 @@ import AppContext from "../../context/AppContext";
 import classes from "./AuthForm.module.css";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-
 const AuthForm = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const [isLogin, setIsLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { token, setToken } = useContext(AppContext);
-  const history=useHistory()
+  const { setToken, setIsLoggedIn } = useContext(AppContext);
+  const history = useHistory();
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -40,11 +39,11 @@ const AuthForm = () => {
         if (res.ok) {
           return res.json().then((data) => {
             let tokenId = data.idToken;
-            setToken(tokenId);
-            console.log("here", token);
+            setIsLoggedIn(true);
+            localStorage.setItem("token", tokenId);
             alert("Logged In");
-            history.push('/profile')
-
+            setToken(tokenId);
+            history.push("/profile");
           });
         } else {
           return res.json().then((data) => {
@@ -74,9 +73,12 @@ const AuthForm = () => {
         setIsLoading(false);
         if (res.ok) {
           alert("Successfully Registered");
+          emailInputRef.current.value = "";
+          passwordInputRef.current.value = "";
+          setIsLogin(true);
         } else {
           return res.json().then((data) => {
-            let errorMsg = "Authentication Failerd";
+            let errorMsg = "Authentication Failed";
             if (data) {
               errorMsg = data?.error?.message;
             }

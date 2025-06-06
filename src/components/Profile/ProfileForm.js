@@ -4,13 +4,15 @@ import AppContext from "../../context/AppContext";
 
 const ProfileForm = () => {
   const newPasswordRef = useRef();
-  const { token } = useContext(AppContext);
+
+  const { setIsLoggedIn } = useContext(AppContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
     const newEnteredPassword = newPasswordRef.current.value;
-    console.log(newEnteredPassword);
     if (!token) return alert("Need to login first");
+    if (token) setIsLoggedIn(true);
 
     fetch(
       "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDLOTD964PNfHMmKh2v3Ad2DhAeDuOI60c",
@@ -27,6 +29,7 @@ const ProfileForm = () => {
       }
     )
       .then((res) => {
+        newPasswordRef.current.value = "";
         alert("Password Changed");
       })
       .catch((error) => {

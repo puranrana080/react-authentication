@@ -6,11 +6,12 @@ import { useContext } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const MainNavigation = () => {
-  const { token, setToken } = useContext(AppContext);
+  const { isLoggedIn, setIsLoggedIn } = useContext(AppContext);
   const history = useHistory();
 
   const handleLogOut = () => {
-    setToken("");
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
     alert("Logged Out");
     history.push("/auth");
   };
@@ -21,14 +22,14 @@ const MainNavigation = () => {
       </Link>
       <nav>
         <ul>
-          {!token && (
+          {!isLoggedIn && (
             <>
               <li>
                 <Link to="/auth">Login</Link>
               </li>
             </>
           )}
-          {token && (
+          {isLoggedIn && (
             <>
               <li>
                 <Link to="/profile">Profile</Link>
