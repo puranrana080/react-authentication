@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-
+import { useState, useRef, useContext } from "react";
+import AppContext from "../../context/AppContext";
 import classes from "./AuthForm.module.css";
 
 const AuthForm = () => {
@@ -7,6 +7,8 @@ const AuthForm = () => {
   const passwordInputRef = useRef();
   const [isLogin, setIsLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const { token, setToken } = useContext(AppContext);
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -34,8 +36,10 @@ const AuthForm = () => {
         setIsLoading(false);
         if (res.ok) {
           return res.json().then((data) => {
-            let token = data.idToken;
-            localStorage.setItem("token", token);
+            let tokenId = data.idToken;
+            setToken(tokenId);
+            console.log("here", token);
+            alert("Logged In");
           });
         } else {
           return res.json().then((data) => {
@@ -64,6 +68,7 @@ const AuthForm = () => {
       ).then((res) => {
         setIsLoading(false);
         if (res.ok) {
+          alert("Successfully Registered");
         } else {
           return res.json().then((data) => {
             let errorMsg = "Authentication Failerd";
