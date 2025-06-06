@@ -39,7 +39,7 @@ const AuthForm = () => {
         if (res.ok) {
           return res.json().then((data) => {
             let tokenId = data.idToken;
-            const expirationTime = new Date().getTime()+60*1000 //1 hr
+            const expirationTime = new Date().getTime()+5*60*1000 //5 min
             setIsLoggedIn(true);
             localStorage.setItem("token", tokenId);
             localStorage.setItem('expirationTime',expirationTime)
